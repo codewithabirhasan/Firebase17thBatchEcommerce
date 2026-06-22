@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "247044733190",
+    "project_id": "thbatchfirebase",
+    "storage_bucket": "thbatchfirebase.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:247044733190:android:79890a2f9cc5c7bf1c0687",
+        "android_client_info": {
+          "package_name": "com.example.firebase_class_seventeen_batch"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDEZzmYkYb2Zx8bfKEc8bBX4iFBUNgohFI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
