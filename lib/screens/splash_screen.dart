@@ -1,4 +1,6 @@
 import 'package:firebase_class_seventeen_batch/screens/introduction_page.dart';
+import 'package:firebase_class_seventeen_batch/screens/profile_screen.dart';
+import 'package:firebase_class_seventeen_batch/services/firebase_auth_services.dart';
 import 'package:flutter/material.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -9,15 +11,28 @@ class SplashScreen extends StatefulWidget {
 }
 
 class _SplashScreenState extends State<SplashScreen> {
+  final FirebaseAuthServices _firebaseAuthServices = FirebaseAuthServices();
+
   @override
   void initState() {
-    Future.delayed(Duration(seconds: 3), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => IntroductionPage()),
-      );
-    });
     super.initState();
+    _checkAuthAndNavigate();
+  }
+
+  Future<void> _checkAuthAndNavigate() async {
+    await Future.delayed(const Duration(seconds: 3));
+
+    final users = await _firebaseAuthServices.authStateChanges.first;
+
+    if (!mounted) return;
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            users != null ? ProfileScreen() : const IntroductionPage(),
+      ),
+    );
   }
 
   @override

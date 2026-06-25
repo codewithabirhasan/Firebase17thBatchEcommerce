@@ -38,9 +38,9 @@ class _LoginScreenState extends State<LoginScreen> {
         isloading = false;
       });
 
-      Navigator.push(
+      Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (_) => ProfileScreen()),
+        MaterialPageRoute(builder: (_) => const ProfileScreen()),
       );
     } on FirebaseAuthException catch (exception) {
       String message;

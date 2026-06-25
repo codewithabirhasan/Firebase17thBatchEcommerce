@@ -1,6 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_class_seventeen_batch/screens/profile_screen.dart';
 import 'package:firebase_class_seventeen_batch/screens/signin_screen.dart';
 import 'package:firebase_class_seventeen_batch/services/firebase_auth_services.dart';
+import 'package:firebase_class_seventeen_batch/services/profile_service.dart';
 import 'package:flutter/material.dart';
 
 class SignUpScreen extends StatefulWidget {
@@ -20,6 +22,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   final FirebaseAuthServices firebaseAuthServices = FirebaseAuthServices();
 
+  final ProfileService profileService = ProfileService();
+
   Future register() async {
     setState(() {
       isLoading = true;
@@ -33,19 +37,47 @@ class _SignUpScreenState extends State<SignUpScreen> {
         context,
       ).showSnackBar(SnackBar(content: Text("Password do not match")));
 
+      setState(() {
+        isLoading = false;
+      });
       return;
     }
 
-    await firebaseAuthServices.register(email, password);
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text("Registration Successfully")));
+    try {
+      await firebaseAuthServices.register(email, password);
 
-    setState(() {
-      isLoading = false;
-    });
+      // signup er por uid FirebaseAuth.currentUser theke neya safe
+      final uid = FirebaseAuth.instance.currentUser?.uid;
 
-    Navigator.push(context, MaterialPageRoute(builder: (_) => ProfileScreen()));
+      if (uid == null) {
+        throw Exception('User ID not found after registration');
+      }
+
+      await profileService.createInitialprofile(uid, email);
+
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text("Registration Successfully")));
+
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const ProfileScreen()),
+      );
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Registration failed: $e')));
+      }
+    } finally {
+      if (mounted) {
+        setState(() {
+          isLoading = false;
+        });
+      }
+    }
   }
 
   @override
