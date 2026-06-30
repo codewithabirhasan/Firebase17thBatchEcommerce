@@ -1,4 +1,5 @@
 import 'package:firebase_class_seventeen_batch/screens/introduction_page.dart';
+import 'package:firebase_class_seventeen_batch/screens/product_screen.dart';
 import 'package:firebase_class_seventeen_batch/screens/profile_screen.dart';
 import 'package:firebase_class_seventeen_batch/services/firebase_auth_services.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +31,7 @@ class _SplashScreenState extends State<SplashScreen> {
       context,
       MaterialPageRoute(
         builder: (context) =>
-            users != null ? ProfileScreen() : const IntroductionPage(),
+            users != null ? ProductScreen() : const IntroductionPage(),
       ),
     );
   }
